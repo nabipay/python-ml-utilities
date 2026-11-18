@@ -52,3 +52,30 @@ def chk_outliers(data, col):
         print('There are outliers below the lower range')
     if upper_range < data[col].max():
         print('There are outliers above the upper range')
+
+
+
+def stacked_barplot(data, predictor, target):
+    """
+    Print the category counts and plot a stacked bar chart
+
+    data: dataframe
+    predictor: independent variable
+    target: target variable
+    """
+    count = data[predictor].nunique()
+    sorter = data[target].value_counts().index[-1]
+    tab1 = pd.crosstab(data[predictor], data[target], margins=True).sort_values(
+        by=sorter, ascending=False
+    )
+    print(tab1)
+    print("-" * 120)
+    tab = pd.crosstab(data[predictor], data[target], normalize="index").sort_values(
+        by=sorter, ascending=False
+    )
+    tab.plot(kind="bar", stacked=True, figsize=(count + 5, 5))
+    plt.legend(
+        loc="lower left", frameon=False,
+    )
+    plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
+    plt.show()
